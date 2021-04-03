@@ -1,0 +1,4 @@
+baseURL = "https://jornhub.be/"
+languageCode = "en-us"
+title = "Jornhub"
+theme = "github-styles"
