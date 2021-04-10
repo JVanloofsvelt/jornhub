@@ -2,7 +2,7 @@ baseURL = "https://jornhub.pages.dev/"
 
 languageCode = "en-us"
 
-title = "Jornhub.dev"
+title = "Jornhub"
 
 theme = "github-style"
 
