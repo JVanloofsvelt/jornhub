@@ -1,4 +1,42 @@
 baseURL = "https://jornhub.be/"
+
 languageCode = "en-us"
-title = "Jornhub"
-theme = "github-styles"
+
+title = "Jornhub.be"
+
+theme = "github-style"
+
+# Don't rewrite relative URLS as canonical/absolute paths.
+canonifyURLs = false # It's false by default.
+
+ # Rewrite relative URls to be relative to the 'current' page (instead of the root) so that the
+ # site is remains functional when browsed from a filesystem.
+relativeURLs = true # Doesn't seem to work, because the theme is explicitly using absolute URLs.
+
+copyright = "© 2021 Jorn Vanloofsvelt"
+
+
+[params]
+favicon = "favicon.svg"
+
+# HTML meta description for home page. What makes a good description?
+tagline = "Jorn Vanloofsvelt - S-Class Hero" 
+
+author = "Jorn Vanloofsvelt"
+
+location = "Belgium"
+
+avatar = "images/avatar.jpg"
+
+description = "Hero for fun"
+
+github = "JVanloofsvelt"
+
+linkedin = "jorn-vanloofsvelt"
+
+
+# An array of links to other sites can also be added:
+#[[params.links]]
+#title = "Link title"
+#icon = ""
+#href = "https://example.com"

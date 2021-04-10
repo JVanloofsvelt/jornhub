@@ -1,0 +1,6 @@
+baseURL = "https://jornhub.be/"
+languageCode = "en-us"
+title = "Jornhub"
+theme = "github-style"
+relativeURLs = true  # Rewrite relative URls to be relative to the 'current' page (instead of the root) so that the site is remains functional when browsed from a filesystem.
+canonifyURLs = false # False by default
