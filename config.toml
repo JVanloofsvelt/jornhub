@@ -41,3 +41,7 @@ linkedin = "jorn-vanloofsvelt"
 #title = "Link title"
 #icon = ""
 #href = "https://example.com"
+
+[Author]
+    name = "Jorn Vanloofsvelt"
+    email = "jorn@jornhub.dev"
