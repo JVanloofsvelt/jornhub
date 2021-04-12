@@ -28,6 +28,7 @@ location = "Belgium"
 
 avatar = "/images/avatar.jpg"
 
+# Avatar with ideal dimensions for Open Graph data
 avatarOg = "/images/avatar-og.jpg"
 
 description = "Hero for fun"
@@ -42,6 +43,8 @@ linkedin = "jorn-vanloofsvelt"
 #icon = ""
 #href = "https://example.com"
 
-[Author]
+
+# Author information, appears in the RSS feed's xml.
+[Author] 
     name = "Jorn Vanloofsvelt"
     email = "jorn@jornhub.dev"
