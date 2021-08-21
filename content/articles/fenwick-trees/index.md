@@ -24,9 +24,14 @@ I assume you spent some time reading and trying to understand Binary Index Trees
 
 ## Terminology
 
-**Input array:** the array for which prefix sum queries will be performed, facilitated by the use of a Fenwick tree.  
-**LSB:** acronym for “least significant bit”  
-**MSB:** acronym for “most significant bit”  
+Input array
+: the array for which prefix sum queries will be performed, facilitated by the use of a Fenwick tree.  
+
+LSB
+: acronym for “least significant bit”  
+
+MSB
+: acronym for “most significant bit”  
   
 ## Key 1 - Binary representation of integers: a decision tree
 
