@@ -15,6 +15,7 @@ relativeURLs = true # Doesn't seem to work, because the theme is explicitly usin
 
 copyright = "© 2021 Jorn Vanloofsvelt"
 
+enableGitInfo = true
 
 [params]
 favicon = "/favicon.svg"
@@ -43,6 +44,7 @@ linkedin = "jorn-vanloofsvelt"
 #icon = ""
 #href = "https://example.com"
 
+githubRepoUrl = "https://github.com/JVanloofsvelt/jornhub"
 
 # Author information, appears in the RSS feed's xml.
 [Author] 
