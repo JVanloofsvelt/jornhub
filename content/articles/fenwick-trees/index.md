@@ -116,7 +116,7 @@ Note that index 0 is a separate case, it is not part of the binary tree. The pre
 
 There are quite a few articles on Fenwick trees that try to explain the concept with 1-based indexing because it’s supposedly easier to understand. In my opinion it adds another layer of indirection that is not helpful, and perhaps even confusing. In the drawing we have here, the most significant bit simply divides all non-0 numbers: 1-7 on the left of the root node, and 9-15 on the right. Since this first bit is the entry point for the decomposition of the index number in its separate bits (as described in Key 2), I believe it’s key to have it centered this way.
 
-Now we have an array of prefix sum subsolutions where each element is the sum of a span of elements of the input array. For example, ```S[1:4]``` is the sum of 4 elements of the input array:
+Now we have an array of prefix sum subsolutions where each element is the sum of a span of elements of the input array. For example, \\( S[1:4] \\) is the sum of 4 elements of the input array:
 ```c
 fenwick_tree[4] = input_array[1] + input_array[2] + input_array[3] + input_array[4];
 ```
@@ -174,13 +174,17 @@ int prefix_sum(int i) {
 
 Updating the tree seems to be a little less intuitive. Our Fenwick tree/array contains several overlapping subsolutions for prefix sums, if we update one element of the input array then we need to update several subsolutions in the Fenwick tree. We’d need to add some (and the same) delta to each of those overlapping subsolutions.
 
-We can start at the index of the updated element itself, adding a delta there. Next, we need to update all overlapping subsolutions for indexes that are greater. Only those that are greater, because the prefix sum of smaller indexes should remain unaffected: updating an element in the input array only affects the prefix sum for all indexes that are equal or greater.
+We can start at the index of the updated element itself, adding a delta there. Next, we need to update all overlapping subsolutions for indexes that are greater. Only those that are greater, because the prefix sum of smaller indexes should remain unaffected: updating an element in the input array only affects the prefix sum for all indexes that are equal or greater. As you'll see, it is not as evident as simply traversing up the binary tree from child to parent.
 
-How do we find these other nodes that need to be updated? Note that each overlapping subsolution in the Fenwick tree consecutively finds itself at some level higher in the binary tree, and further to the right at some greater index. To find the first overlapping subsolution we need to add _something_ to our index. Recall that each level of the binary tree corresponds with the position of one bit in the binary numeral; this means that to find the next overlapping subsolution we need to at least trigger a bitwise carry-over when incrementing our index, so that some more significant bit gets set to 1.
+So, how do we find these other nodes that need to be updated? Take a look at the diagram below. Note that each overlapping subsolution in the Fenwick tree consecutively finds itself at some level higher in the binary tree, and further to the right at some greater index. To find the first overlapping subsolution we need to add _something_ to our index. Recall that each level of the binary tree corresponds with the position of one bit in the binary numeral; this means that to find the next overlapping subsolution we need to at least trigger a bitwise carry-over when incrementing our index, so that some more significant bit gets set to 1.
+
+{{< figure src="navigate-by-LSB-300pct.webp" alt="Navigate Fenwick tree by LSB" width="100%" >}}
 
 The smallest number that we can add to our index that will trigger a bitwise carry-over is the number that is represented by its LSB. Adding any smaller number will (by definition of LSB) add positive bits to numeral positions where the bits of the index number were 0, and therefore not trigger a carry-over.
 
-The following sample recursively adds the LSB of i to itself, upating the Fenwick tree along the way:
+Note that \\( 11 + LSB(11) \\)  doesn't take you from a child to a parent node in either the binary tree or the Fenwick tree. It's not that kind of tree traversal.
+
+The following sample recursively adds the LSB of index i to itself, upating the Fenwick tree along the way:
 
 ```c
 void add(int i, int delta) {
