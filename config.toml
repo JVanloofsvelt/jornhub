@@ -46,7 +46,7 @@ facebookAppId = "196088782584132"
 #icon = ""
 #href = "https://example.com"
 
-githubRepoUrl = "https://github.com/JVanloofsvelt/jornhub"
+githubRepoUrl = "https://github.com/JVanloofsvelt/jornhub/"
 
 # Author information, appears in the RSS feed's xml.
 [Author] 
