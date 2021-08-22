@@ -4,7 +4,7 @@ date = 2021-08-18T21:21:52+02:00
 keywords = ["Fenwick tree", "Binary index tree"]
 summary = "This is not the best song in the world, it is just a tribute."
 math = true
-draft = true
+draft = false
 +++
 
 ## Intro
