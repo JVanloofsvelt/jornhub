@@ -43,7 +43,7 @@ MSB
   
 [^lsb]: https://en.wikipedia.org/wiki/Bit_numbering#Least_significant_bit
 [^msb]: https://en.wikipedia.org/wiki/Bit_numbering#Most_significant_bit
-[^prefixsum] https://en.wikipedia.org/wiki/Prefix_sum
+[^prefixsum]: https://en.wikipedia.org/wiki/Prefix_sum
 
 ## Key 1 - Binary representation of integers: a decision tree
 
