@@ -9,7 +9,7 @@ draft = false
 
 ## Intro
 
-When I first learned about binary index trees (abbreviated as BIT, also called Fenwick trees) I could find multiple resources that explain how to update and query such a tree. I imagine most people quickly understand why they work, but I came across at least a few comments of people who were left wondering how Peter Fenwick[^1] was able to come up with such an elegant datastructure. Like myself, these people were looking to spark their intuition. Some articles do in fact attempt to transfer some intuition to the reader, but I couldn’t find any that completely satisfied me.
+When I first learned about binary index trees (also called Fenwick trees) I could find multiple resources that explain how to update and query such a tree. I imagine most people quickly understand why they work, but I came across at least a few comments of people who were left wondering how Peter Fenwick[^1] was able to come up with such an elegant datastructure. Like myself, these people were looking to spark their intuition. Some articles do in fact attempt to transfer some intuition to the reader, but I couldn’t find any that completely satisfied me.
 This article is my attempt at explaining the concept. I hope to relieve those of you who have already spent some time reading but are still feeling unsatisfied like I was myself.
 
 I will not recap the properties of a BIT, or the motivation for using a BIT, since this information is readily available. If you’d like an introduction or if you want to refresh your memory, then first head out to [wikipedia](https://en.wikipedia.org/wiki/Fenwick_tree) where the first few paragraphs are a good run-up for the rest of this article.
@@ -20,22 +20,36 @@ I will start by positing two key concepts that can be grokked independently, and
 
 ## Prerequisite
 
-I assume you spent some time reading and trying to understand Binary Index Trees.
+I assume you have spent some time reading and trying to understand Binary Index Trees. Even if you don't fully understand the concept yet, this article may improve your understanding.
 
 ## Terminology
+
+Prefix sum
+: cumulative sum of some range of elements of some sequence, starting from that sequence's first element. [^prefixsum]
 
 Input array
 : the array for which prefix sum queries will be performed, facilitated by the use of a Fenwick tree.  
 
+BIT
+: acronym for “Binary index tree”, also called Fenwick tree
+
 LSB
-: acronym for “least significant bit”  
+: acronym for “least significant bit” [^lsb]  
 
 MSB
-: acronym for “most significant bit”  
+: acronym for “most significant bit” [^msb] 
+
+
   
+[^lsb]: https://en.wikipedia.org/wiki/Bit_numbering#Least_significant_bit
+[^msb]: https://en.wikipedia.org/wiki/Bit_numbering#Most_significant_bit
+[^prefixsum]: https://en.wikipedia.org/wiki/Prefix_sum
+
 ## Key 1 - Binary representation of integers: a decision tree
 
-Deriving the binary representation of a number can be thought of as a knapsack problem: given the distinct digits the base-2 numeral system consists of (i.e. 0 and 1), you want to express an integer in the fewest digits/bits possible. You start with the largest power of two that is smaller than the integer (that will be its most significant bit; we're executing a greedy algorithm here) and you fill it up with smaller and smaller bits until your knapsack is full. You then have a combination of bits that precisely represents your integer.
+Deriving the binary representation of a number can be thought of as a knapsack problem[^knapsack]: given the distinct digits the base-2 numeral system consists of (i.e. 0 and 1), you want to express an integer in the fewest digits/bits possible. You start with the largest power of two that is smaller than the integer (that will be its most significant bit; we're executing a greedy algorithm here) and you fill it up with smaller and smaller bits until your knapsack is full. You then have a combination of bits that precisely represents your integer.
+
+[^knapsack]: https://en.wikipedia.org/wiki/Knapsack_problem
 
 For example, to represent the number 7:
 
@@ -45,8 +59,8 @@ Summing the separate bits:
   decimal:   4 +   2 +   1 =   7
 
 The running total of that summation:  
- binary:  100 > 110 > 111  
- decimal:    4 >  6 >   7
+ binary:  100 → 110 → 111  
+ decimal:    4 →  6 →   7
 ```
 Where 4 and 6 are subsolutions, and 7 is the final solution for the number we wanted to represent.  
 
@@ -67,14 +81,14 @@ Observe that:
 - The number of layers in the tree matches the number of bits needed to represent your number; that is: \\( log_2(max\\_number\\_value) \\). In practical applications of BITs this will often be a constant such as 32 or 64 bits, depending on the datatype you choose to represent an index of the input array.
 - Any node in the tree can be a terminal node; you only move further down the tree if you need more positive bits to represent your number. That is also why the last bit of every leaf node is positive: if you didn’t need a positive bit there you would have halted at the previous layer.
 - 0 is not included in the tree, consider it to be a special, but very simple case.
-- There is one node for every (non-zero) number that can be represented by N bits; correspondingly, there is one node for every element in an array that can be indexed using your number. **_This symmetry will prove to be the reason why a Fenwick tree can be represented by an array of size equal to that of the input array._**
+- There is one node for every (non-zero) number that can be represented by N bits; correspondingly, there is one node for every element in an array that can be indexed using your number. **_This symmetry will prove to be the reason that a Fenwick tree can be represented by an array of size equal to that of the input array._**
 - ... TODO: note overlapping subsolutions ...
 
 ## Key 2 - A bit manipulation trick: (i & -i)
 
-If you have studied the implementation of BITs then you should already be familiar with the (i & -i) trick. This is an expression that works in both C and Python for example, and it returns the least significant positive bit of i; it gives us an integer where only that bit is set.
+(i & -i) is an expression that works in both C and Python for example, and it returns the least significant positive bit of i; it gives us an integer where only that bit is set.
 
-Why does it work? Assuming i is positive, then making it negative will have the same result as flipping all of the bits of that integer, followed by incrementing it by 1 (see 2’s complement for why this is the case[^2]). If you ‘AND’ it with itself, it will yield the LSB. Let’s first look at an example using i = 6, and then try to generalize:
+Why does it work? Assuming i is positive, then making it negative will have the same result as flipping all of the bits of that integer, followed by incrementing it by 1 ([see 2’s complement for why this is the case](https://en.wikipedia.org/wiki/Two's_complement)). If you ‘AND’ it with itself, it will yield the LSB. Let’s first look at an example using i = 6, and then try to generalize:
 
 ```diagram
 1. 0110  — binary representation of 6, with a leading sign bit (0 for positive, 1 for negative numbers)
@@ -83,17 +97,16 @@ Why does it work? Assuming i is positive, then making it negative will have the 
 4. 0110 & 1010 = 0010  — apparently (i & -i), the bitwise AND, preserves only the least signficant bit of i
 ```
 
-[^2]: https://en.wikipedia.org/wiki/two's_complement
 
 In order to generalize, observe that:
 
-- Flipping all bits sets all bits that are less significant than the LSB to 1; the lesser significant bits are by definition 0, so flipping them makes them 1.
-- Flipping all bits also sets the LSB to 0
-- Incrementing that by 1 causes a carry-over that sets all those less significant bits to 0 again. The LSB becomes 1 again, since this position receives the carry-over.
-- The more significant bits remain unaffected by the carry-over since we know the LSB was set to 0 before it received the carry-over, and that means there is no further carry-over into the MSBs.
-- In step 4, the more significant bits and their flipped counterpart cancel each other out due to the bitwise AND operation.
-- The less significant bits were 0 for i as well as for –i, so nothing changes there by AND-ing i and -i
-- Only the LSB is set in both i and –i, so it is the only that bit preserved.
+1. Flipping all bits sets all bits that are less significant than the LSB to 1; the lesser significant bits are by definition 0, so flipping them makes them 1.
+2. Flipping all bits also sets the LSB to 0
+3. Incrementing that by 1 causes a carry-over that sets all those less significant bits to 0 again. The LSB becomes 1 again, since this position receives the carry-over.
+4. The more significant bits remain unaffected by the carry-over since we know the LSB was set to 0 before it received the carry-over, and that means there is no further carry-over into the MSBs.
+5. In step 4, the more significant bits and their flipped counterpart cancel each other out due to the bitwise AND operation.
+6. The less significant bits were 0 for i as well as for –i, so nothing changes there by AND-ing i and -i
+7. Only the LSB is set in both i and –i, so it is the only that bit preserved.
 
 Tying these observations together proves that (i & -i) indeed preserves only the LSB.
 
@@ -101,7 +114,7 @@ Tying these observations together proves that (i & -i) indeed preserves only the
 
 Let’s imagine that we don’t yet know what Fenwick trees are, and that we’re looking for a way to transform the input array into a different kind of datastructure that affords both prefix-sum lookups and updates that are faster than \\( O(N) \\). Perhaps a kind of divide and conquer approach, would that be effective? We can start by splitting the array in half, and then summarize each half by calculating their sums. Doing this recursively we’d end up with some kind of binary tree so there’s a chance we’ll find a \\( O(log(N)) \\) solution there since that’s how fast you can descend a binary tree.
 
-Now recall our decision tree as described in Key 1; recall how we reconstruct the binary representation of a number, an algorithm we bit-bangers happen to be already intimately familiar with. Notice the following similarity between calculating prefix sums and reconstructing that binary representation: they are both monotonically increasing in nature. If we were to store some partial solution of the prefix sum calculation in that tree, then we can reconstruct the prefix sum at the same pace as we are stepping through the tree: \\( O(log(N)) \\). If we want the prefix sum of the first K numbers, then we would step through the tree to reconstruct integer \\( (K-1) \\) (which is the 0-based index for the Kth element in the input array) while summing up the partial solutions along the way.
+Now recall our decision tree as described in Key 1; recall how we reconstruct the binary representation of a number, an algorithm we bit-bangers happen to be already intimately familiar with. Notice the following similarity between calculating prefix sums and reconstructing that binary representation: they are both monotonically increasing in nature. If we were to store some partial solution of the prefix sum calculation in that tree, then we can reconstruct the prefix sum at the same pace as we are stepping through the tree: \\( O(log(N)) \\). If we want the prefix sum of the first k numbers, then we would step through the tree to reconstruct integer \\( (k-1) \\) (which is the 0-based index for the k-th element in the input array) while summing up the partial solutions along the way.
 
 ## The datastructure
 
@@ -112,7 +125,7 @@ Let’s imagine the second array is already provisioned with partial sums:
 
 At each node the bit under consideration is marked in bold, if the bit is included in the binary representation of the index number then you navigate down the tree along its right child, otherwise along its left child. Each node is mapped to a partial prefix sum, and these partial sums are added to a running total each time you advance from a node to its right child (i.e. the bit is included in the index number).
 
-Note that index 0 is a separate case, it is not part of the binary tree. The prefix sum of the first element is evidently the element itself.
+Note that index 0 is a separate case; it is not part of the binary tree. The prefix sum of the first element is evidently the element itself.
 
 There are quite a few articles on Fenwick trees that try to explain the concept with 1-based indexing because it’s supposedly easier to understand. In my opinion it adds another layer of indirection that is not helpful, and perhaps even confusing. In the drawing we have here, the most significant bit simply divides all non-0 numbers: 1-7 on the left of the root node, and 9-15 on the right. Since this first bit is the entry point for the decomposition of the index number in its separate bits (as described in Key 2), I believe it’s key to have it centered this way.
 
@@ -129,7 +142,9 @@ If we stack these fat arrows we get a diagram that I have seen reappear in sever
 
 {{< figure src="fenwick-tree-stacked-300pct.webp" alt="Fenwick tree spans stacked" width="100%" >}}
 
-These "yardsticks" can be combined so that we can efficiently compute the prefix sum for any span of elements in the input array. At most 4 (or \\( log_2(max\\_index) \\)) subsolutions need to be combined to compute the prefix sum for any index.
+These "yardsticks" can be combined so that we can efficiently compute the prefix sum for any span of elements in the input array. At most 4 (or \
+
+log_2(max\\_index) \\)) subsolutions need to be combined to compute the prefix sum for any index.
 
 ## From Binary tree to Fenwick tree
 
