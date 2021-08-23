@@ -104,9 +104,9 @@ In order to generalize, observe that:
 2. Flipping all bits also sets the LSB to 0
 3. Incrementing that by 1 causes a carry-over that sets all those less significant bits to 0 again. The LSB becomes 1 again, since this position receives the carry-over.
 4. The more significant bits remain unaffected by the carry-over since we know the LSB was set to 0 before it received the carry-over, and that means there is no further carry-over into the MSBs.
-- In step 4, the more significant bits and their flipped counterpart cancel each other out due to the bitwise AND operation.
-- The less significant bits were 0 for i as well as for –i, so nothing changes there by AND-ing i and -i
-- Only the LSB is set in both i and –i, so it is the only that bit preserved.
+5. In step 4, the more significant bits and their flipped counterpart cancel each other out due to the bitwise AND operation.
+6. The less significant bits were 0 for i as well as for –i, so nothing changes there by AND-ing i and -i
+7. Only the LSB is set in both i and –i, so it is the only that bit preserved.
 
 Tying these observations together proves that (i & -i) indeed preserves only the LSB.
 
@@ -189,7 +189,7 @@ int prefix_sum(int i) {
 
 Updating the tree seems to be a little less intuitive. Our Fenwick tree/array contains several overlapping subsolutions for prefix sums, if we update one element of the input array then we need to update several subsolutions in the Fenwick tree. We’d need to add some (and the same) delta to each of those overlapping subsolutions.
 
-We can start at the index of the updated element itself, adding a delta there. Next, we need to update all overlapping subsolutions for indexes that are greater. Only those that are greater, becaus the prefix sum of smaller indexes should remain unaffected: updating an element in the input array only affects the prefix sum for all indexes that are equal or greater. As you'll see, it is not as evident as simply traversing up the binary tree from child to parent.
+We can start at the index of the updated element itself, adding a delta there. Next, we need to update all overlapping subsolutions for indexes that are greater. Only those that are greater, because the prefix sum of smaller indexes should remain unaffected: updating an element in the input array only affects the prefix sum for all indexes that are equal or greater. As you'll see, it is not as evident as simply traversing up the binary tree from child to parent.
 
 So, how do we find these other nodes that need to be updated? Take a look at the diagram below. Note that each overlapping subsolution in the Fenwick tree consecutively finds itself at some level higher in the binary tree, and further to the right at some greater index. To find the first overlapping subsolution we need to add _something_ to our index. Recall that each level of the binary tree corresponds with the position of one bit in the binary numeral; this means that to find the next overlapping subsolution we need to at least trigger a bitwise carry-over when incrementing our index, so that some more significant bit gets set to 1.
 
