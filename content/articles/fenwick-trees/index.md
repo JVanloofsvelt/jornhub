@@ -142,7 +142,7 @@ If we stack these fat arrows we get a diagram that I have seen reappear in sever
 
 {{< figure src="fenwick-tree-stacked-300pct.webp" alt="Fenwick tree spans stacked" width="100%" >}}
 
-These "yardsticks" can be combined so that we can efficiently compute the prefix sum for any span of elements in the input array. At most 4 (or \
+These "yardsticks" can be combined so that we can efficiently compute the prefix sum for any span of elements in the input array. At most 4 (or \\
 
 log_2(max\\_index) \\)) subsolutions need to be combined to compute the prefix sum for any index.
 
