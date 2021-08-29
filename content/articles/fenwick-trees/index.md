@@ -59,8 +59,8 @@ Summing the separate bits:
   decimal:   4 +   2 +   1 =   7
 
 The running total of that summation:  
- binary:  100 → 110 → 111  
- decimal:    4 →  6 →   7
+ binary:  100 -> 110 -> 111  
+ decimal:    4 ->  6 ->   7
 ```
 Where 4 and 6 are subsolutions, and 7 is the final solution for the number we wanted to represent.  
 
@@ -68,11 +68,7 @@ Observe that the running total of the previous summation is monotonically increa
 
 We can represent this process as the traversal of some sort of binary decision tree. For each bit of an N-bit number, starting at the MSB, you either decide to include it or not (i.e. set it to 0 or to 1):
 
-```c
-           100 ----------------- 4 decimal
-    010            110 --------- 2 decimal
-001     011    101      111 ---- 1 decimal
-```
+{{< figure src="binary-decision-tree.webp" alt="Binary decision tree" width="50%" >}}
 
 In bold is the bit under consideration, if you decide to include it in your number then you continue by traversing to the right, otherwise you continue to the left. All remaining less significant bits are considered to be 0 unless you traverse further down the tree to set them to 1. You can stop your traversal down the tree at any level once you have all positive bits needed to represent your number.
 
@@ -80,23 +76,17 @@ Observe that:
 
 - The number of layers in the tree matches the number of bits needed to represent your number; that is: \\( log_2(max\\_number\\_value) \\). In practical applications of BITs this will often be a constant such as 32 or 64 bits, depending on the datatype you choose to represent an index of the input array.
 - Any node in the tree can be a terminal node; you only move further down the tree if you need more positive bits to represent your number. That is also why the last bit of every leaf node is positive: if you didn’t need a positive bit there you would have halted at the previous layer.
+You can't traverse further down the right, yet that last bit is included implicitly.
 - 0 is not included in the tree, consider it to be a special, but very simple case.
-- There is one node for every (non-zero) number that can be represented by N bits; correspondingly, there is one node for every element in an array that can be indexed using your number. **_This symmetry will prove to be the reason that a Fenwick tree can be represented by an array of size equal to that of the input array._**
-- ... TODO: note overlapping subsolutions ...
+- There is one node for every (non-zero) number that can be represented by N bits; correspondingly, there is one node for every element in an array that can be indexed using your number. **_This symmetry will prove to be the reason why a Fenwick tree can be represented by an array of size equal to that of the input array._**
 
-## Key 2 - A bit manipulation trick: (i & -i)
+## Key 2 - A bit manipulation trick
 
-(i & -i) is an expression that works in both C and Python for example, and it returns the least significant positive bit of i; it gives us an integer where only that bit is set.
+If you have studied the implementation of BITs then you hqve probably already come across the \\( (i\\ \\& -i) \\) trick. This is an expression that works in both C and Python for example, and it returns the least significant positive bit of i; it gives us an integer where only that bit is set.
 
 Why does it work? Assuming i is positive, then making it negative will have the same result as flipping all of the bits of that integer, followed by incrementing it by 1 ([see 2’s complement for why this is the case](https://en.wikipedia.org/wiki/Two's_complement)). If you ‘AND’ it with itself, it will yield the LSB. Let’s first look at an example using i = 6, and then try to generalize:
 
-```diagram
-1. 0110  — binary representation of 6, with a leading sign bit (0 for positive, 1 for negative numbers)
-2. 1001  — flipped all bits
-3. 1010  — incremented by 1, this gives us the 2’s complement representation of -6
-4. 0110 & 1010 = 0010  — apparently (i & -i), the bitwise AND, preserves only the least signficant bit of i
-```
-
+{{< figure src="bit-manipulation-trick-300pct.webp" alt="Bit manipulation trick" width="80%" >}}
 
 In order to generalize, observe that:
 
@@ -108,7 +98,7 @@ In order to generalize, observe that:
 6. The less significant bits were 0 for i as well as for –i, so nothing changes there by AND-ing i and -i
 7. Only the LSB is set in both i and –i, so it is the only that bit preserved.
 
-Tying these observations together proves that (i & -i) indeed preserves only the LSB.
+Tying these observations together proves that \\( (i\\ \\& -i) \\)  indeed preserves only the LSB.
 
 ## First intuition
 
