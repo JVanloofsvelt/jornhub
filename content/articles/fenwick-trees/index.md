@@ -154,7 +154,7 @@ Modifying the previous diagram, we can draw a different tree that more accuratel
 
 {{< figure src="fenwick-m-ary-tree-300pct.webp" alt="Fenwick m-ary tree" width="100%" >}}
 
-In red you see a tree that is oriented from left to right instead of top-down. It is not a binary tree, but it is an N-ary tree where each node has up to N children, i.e. \\( log_2(max\\_index) \\)). Traversing from a parent to a child means setting one more (less significant) bit to 1 (the next one to the right of the last positive bit); correspondingly, it means adding another subsolution to a running total.
+In red you see a tree that is oriented from left to right instead of top-down. It is not a binary tree, but it is an N-ary tree where each node has up to N children, i.e. \\( log_2(max\\_index) \\). Traversing from a parent to a child means setting one more (less significant) bit to 1 (the next one to the right of the last positive bit); correspondingly, it means adding another subsolution to a running total.
 
 This tree is what appears if you contract the left-descending edges on the previous diagram, thereby eliminating node-visits where no partial sum is added to your running total.
 
