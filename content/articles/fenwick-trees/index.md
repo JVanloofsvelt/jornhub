@@ -82,7 +82,7 @@ You can't traverse further down the right, yet that last bit is included implici
 
 ## Key 2 - A bit manipulation trick
 
-If you have studied the implementation of BITs then you hqve probably already come across the \\( (i\\ \\& -i) \\) trick. This is an expression that works in both C and Python for example, and it returns the least significant positive bit of i; it gives us an integer where only that bit is set.
+If you have studied the implementation of BITs then you have probably already come across the \\( (i\\ \\& -i) \\) trick. This is an expression that works in both C and Python for example, and it returns the least significant positive bit of i; it gives us an integer where only that bit is set.
 
 Why does it work? Assuming i is positive, then making it negative will have the same result as flipping all of the bits of that integer, followed by incrementing it by 1 ([see 2’s complement for why this is the case](https://en.wikipedia.org/wiki/Two's_complement)). If you ‘AND’ it with itself, it will yield the LSB. Let’s first look at an example using i = 6, and then try to generalize:
 
